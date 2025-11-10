@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Study Planner</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>AI Study Planner</h1>
+    <p>Plan your studies based on difficulty, focus, and performance.</p>
+
+    <form action="/generate" method="POST">
+      <label>Subjects (comma separated):</label><br>
+      <input type="text" name="subjects" placeholder="Math, Science, English" required><br><br>
+
+      <label>Difficulty (1–10 for each subject):</label><br>
+      <input type="text" name="difficulty" placeholder="8,6,7" required><br><br>
+
+      <label>Current Scores (0–100 for each subject):</label><br>
+      <input type="text" name="scores" placeholder="70,85,65" required><br><br>
+
+      <label>Total Study Hours (per week):</label><br>
+      <input type="number" name="hours" placeholder="20" required><br><br>
+
+      <label>Focus Levels (1–10):</label><br>
+      Morning: <input type="number" name="morning" min="1" max="10" value="8">
+      Afternoon: <input type="number" name="afternoon" min="1" max="10" value="6">
+      Night: <input type="number" name="night" min="1" max="10" value="7"><br><br>
+
+      <button type="submit">Generate Study Plan</button>
+    </form>
+
+    {% if tables %}
+      <h2>📅 Generated Study Plan</h2>
+      {% for table in tables %}
+        {{ table|safe }}
+      {% endfor %}
+    {% endif %}
+
+    {% if suggestions %}
+      <h3>🧠 Smart Suggestions</h3>
+      <ul>
+        {% for s in suggestions %}
+          <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</body>
+</html>
+
