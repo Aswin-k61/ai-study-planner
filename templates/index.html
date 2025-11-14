@@ -5,12 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Study Planner</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
+<style>
+    #background-video {
+      position: fixed; /* Fixes the video to the viewport */
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      background: rgba(0, 0, 0, 0.3); 
+      z-index: -99;/* CRITICAL: Puts it behind the main content */
+      background-size: cover;
+    }
+
+    /* Also ensure your body has no margins to prevent scrollbars */
+    body {
+      /* ... existing body styles ... */
+      margin: 0; 
+      padding: 0;
+      overflow-x: hidden; /* Prevents horizontal scrollbar */
+    }
+
+    /* Centering the main content container and adding a slight shadow */
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Styling the main heading */
+    h1 {
+      color: #007bff; /* A nice blue color for emphasis */
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    /* Styling the form labels */
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    /* Styling input fields */
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box; /* Include padding/border in the element's total width and height */
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Styling the submit button */
+    button[type="submit"] {
+      background-color: #28a745; /* Green color for action */
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    /* Smaller input styling for Focus Levels */
+    .container input[type="number"][name="morning"],
+    .container input[type="number"][name="afternoon"],
+    .container input[type="number"][name="night"] {
+      width: 60px; /* Make them narrower */
+      display: inline-block;
+      margin-right: 15px;
+      text-align: center;
+    }
+
+    /* Styling for the output sections */
+    h2, h3 {
+      color: #007bff;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 5px;
+      margin-top: 25px;
+    }
+
+    /* Basic styling for the suggestion list */
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+      padding-left: 15px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: "•";
+      color: #28a745; /* Green bullet point */
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+  </style>
 <body>
+  <video autoplay muted loop playsinline id="background-video">
+  <source src="{{ url_for('static', filename='assets/videos/istockphoto-474982168-640_adpp_is.mp4') }}" type="video/mp4">
+  Your browser does not support the video tag.
+  </video>
   <div class="container">
     <h1>AI Study Planner</h1>
     <p>Plan your studies based on difficulty, focus, and performance.</p>
-
+    {% if error %}
+        <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+            {{ error }}
+        </div>
+    {% endif %}
     <form action="/generate" method="POST">
       <label>Subjects (comma separated):</label><br>
       <input type="text" name="subjects" placeholder="Math, Science, English" required><br><br>
@@ -50,4 +176,3 @@
   </div>
 </body>
 </html>
-

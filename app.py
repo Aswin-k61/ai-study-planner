@@ -13,15 +13,30 @@ def generate():
     difficulty = request.form['difficulty']
     scores = request.form['scores']
     total_hours = int(request.form['hours'])
-    focus = [int(request.form['morning']), int(request.form['afternoon']), int(request.form['night'])]
 
-    df, suggestions = generate_study_plan(subjects, total_hours, difficulty, scores, focus)
+    focus = [
+        int(request.form.get('morning', 0)),
+        int(request.form.get('afternoon', 0)),
+        int(request.form.get('night', 0))
+    ]
 
-    return render_template(
-        'index.html',
-        tables=[df.to_html(classes='data', index=False)],
-        suggestions=suggestions
-    )
+    try:
+        df, suggestions = generate_study_plan(subjects, total_hours, difficulty, scores, focus)
+
+        return render_template(
+            'index.html',
+            tables=[df.to_html(classes='data', index=False)],
+            suggestions=suggestions,
+            error=None
+        )
+
+    except ValueError as e:
+        return render_template('index.html', error=str(e))
+
+    except Exception as e:
+        print("Unexpected error:", e)
+        return render_template('index.html', error="Something went wrong. Try again.")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
